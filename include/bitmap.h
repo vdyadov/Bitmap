@@ -10,4 +10,11 @@ typedef struct Bitmap
     int magic;
 } Bitmap;
 
+typedef enum Bitmap_magic
+{
+    BITMAP_MAGIC = 0xabababab,
+} Bitmap_magic;
+
+int bitmap__delete(struct Bitmap * p_bitmap); 
+
 #endif /* BITMAP_H */
