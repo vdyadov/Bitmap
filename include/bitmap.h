@@ -17,4 +17,8 @@ typedef enum Bitmap_magic
 
 int bitmap__delete(struct Bitmap * p_bitmap); 
 
+int bitmap__get_bit(struct Bitmap const *p_bitmap, 
+                    unsigned short const bit_idx,
+                    unsigned char *p_bit);
+
 #endif /* BITMAP_H */
