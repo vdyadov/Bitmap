@@ -7,8 +7,8 @@
 /* Функция создания битового массива определенной размерности для n-разрядной машины
 */
 int bitmap__creator(
-                     struct Bitmap * bitmap,
-                     unsigned short len_port)
+    struct Bitmap * bitmap,
+    unsigned short len_port)
 {
    unsigned short amount_ports; 
    unsigned short check_divide_ports;
