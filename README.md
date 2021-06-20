@@ -16,4 +16,11 @@
 
 * ```struct Bitmap const *p_bitmap``` - указатель на битовый массив.
 * ```unsigned short const bit_idx``` - индекс требуемого бита
-* ```unsigned char *p_bit``` - указатель на ппеременную, в которую будет записано значение бита.
+* ```unsigned char *p_bit``` - указатель на переменную, в которую будет записано значение бита.
+***
+```int bitmap__get_size(struct Bitmap const *p_bitmap, unsigned short *p_size)```
+
+Получение размера массива в битах. Битмап должен быть валидным битмапом.
+
+* ```struct Bitmap const *p_bitmap``` - указатель на битовый массив.
+* ```unsigned char *p_bit``` - указатель на ппеременную, в которую будет записан размер
