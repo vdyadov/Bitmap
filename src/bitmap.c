@@ -34,9 +34,10 @@ int bitmap__delete(struct Bitmap * const p_bitmap)
 }
 
 // Функция получения значения бита.
-int bitmap__get_bit(struct Bitmap const * const p_bitmap, 
-                    unsigned short const bit_idx,
-                    unsigned char * const p_bit)
+int bitmap__get_bit(
+    struct Bitmap const * const p_bitmap, 
+    unsigned short const bit_idx,
+    unsigned char * const p_bit)
 {
     int ret = 0;
     
@@ -87,6 +88,39 @@ int bitmap__get_bit(struct Bitmap const * const p_bitmap,
     */
     mask = (unsigned long)1 << (sizeof(unsigned long) * 8 - bit_offset - 1);
     *p_bit = ((target_long & mask) != 0);
+
+ finally:
+    
+    return ret;
+}
+
+// Функция для узнавания размера битмапа
+int bitmap__get_size(
+    struct Bitmap const * const p_bitmap, 
+    unsigned short * const p_size)
+{
+    int ret = 0;
+    
+    if (NULL == p_bitmap) 
+    {
+        ret = -1;
+        fprintf(stderr, "%s: p_bitmap is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (BITMAP_MAGIC != p_bitmap->magic) 
+    {
+        ret = -2;
+        fprintf(stderr, "%s: wrong magic\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_size)
+    {
+        ret = -3;
+        fprintf(stderr, "%s: p_size is nullptr\n", __func__);
+        goto finally;
+    }
+
+    *p_size = p_bitmap->size;
 
  finally:
     
