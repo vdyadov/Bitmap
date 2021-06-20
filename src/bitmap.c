@@ -2,41 +2,46 @@
 
 #include <malloc.h>
 #include <stdio.h>
-
+#include <stdlib.h> 
 
 /* Функция создания битового массива определенной размерности для n-разрядной машины
 */
-void bitmap__creator(struct Bitmap * bitmap, unsigned short len_port)
+int bitmap__creator(
+                     struct Bitmap * bitmap,
+                     unsigned short len_port)
 {
-   unsigned short temp_celiy; 
-   unsigned short temp_drob;
+   unsigned short amount_ports; 
+   unsigned short check_divide_ports;
    unsigned short size_mashina;
-	
+   int ret = 0;
+   
 	bitmap->magic =  BITMAP_MAGIC;
 	bitmap->size = len_port;
 	
 	/// определение разрядности машины 
 	size_mashina = sizeof(unsigned long) * 8;
 	
-	/// определение необходимого количества разрядов порта
-	temp_celiy = bitmap->size / size_mashina;
-	temp_drob = bitmap->size % size_mashina;
+	/// определение количества разрядности выделяемой памяти,для хранения состояния портов
+	amount_ports = bitmap->size / size_mashina;
+	check_divide_ports = bitmap->size % size_mashina;
 	
-	if (0 == temp_drob)
+	if (0 == check_divide_ports)
 	{
-	     bitmap->bit_array = (unsigned long*)calloc(temp_celiy,sizeof(unsigned long)); 
+	     bitmap->bit_array = (unsigned long*)calloc(amount_ports,sizeof(unsigned long)); 
 	}
 	 else
 	  {
-          bitmap->bit_array = (unsigned long*)calloc(temp_celiy+1,sizeof(unsigned long));
+          bitmap->bit_array = (unsigned long*)calloc(amount_ports+1,sizeof(unsigned long));
       }		    
     
     if (NULL == bitmap->bit_array) 
     {
 		// недо­статочно памяти  для выделения битовой карты
-		perror("callok error");
-		exit(2);
-	}    	 
+		printf("недо­статочно памяти  для выделения битовой карты");
+		ret=-1;
+	}    
+		 
+	return ret;
 }	
 
 /* Функция удаления битового массива.
