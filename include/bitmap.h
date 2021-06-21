@@ -22,6 +22,11 @@ int bitmap__get_bit(
     unsigned short const bit_idx,
     unsigned char *p_bit);
 
+int bitmap__set_bit(
+    struct Bitmap *p_bitmap,
+    unsigned short const bit_idx);
+
+
 int bitmap__get_size(
     struct Bitmap const *p_bitmap,
     unsigned short *p_size);
