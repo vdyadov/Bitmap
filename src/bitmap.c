@@ -179,3 +179,47 @@ int bitmap__get_size(
     
     return ret;
 }
+
+// Побитовая инверсия массива
+int bitmap__invert(struct Bitmap * const p_bitmap)
+{
+    int ret = 0;
+
+    if (NULL == p_bitmap) 
+    {
+        ret = -1;
+        fprintf(stderr, "%s: arg is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (BITMAP_MAGIC != p_bitmap->magic) 
+    {
+        ret = -2;
+        fprintf(stderr, "%s: wrong magic\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_bitmap->bit_array)
+    {
+        ret = -3;
+        fprintf(stderr, "%s: bit array pointer is nullptr\n", __func__);
+        goto finally;
+    }
+
+    unsigned short size_allocated = 0;
+    unsigned short correction = 0;
+
+    ((p_bitmap->size % sizeof(unsigned long)) == 0) ? (correction = 0) : (correction = 1);
+    size_allocated = p_bitmap->size / (sizeof(unsigned long) * 8) + correction;
+    for (unsigned short i = 0; i < size_allocated; ++i)
+    {
+        /* это флипает лишние биты в конце, если размер не кратен размеру лонга,
+        но я не думаю, что стоит это ограничивать. До них нельзя доступиться 
+        функциями доступа, так что юзеру должно быть абсолютно наплевать, нули там или
+        не нули
+        */
+        p_bitmap->bit_array[i] = ~p_bitmap->bit_array[i];
+    }
+
+ finally:
+
+    return ret;
+}
