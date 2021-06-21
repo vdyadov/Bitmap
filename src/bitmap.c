@@ -2,6 +2,56 @@
 
 #include <malloc.h>
 #include <stdio.h>
+#include <stdlib.h> 
+
+// Функция создания битового массива определенной размерности для n-разрядной машины
+int bitmap__creator(
+    struct Bitmap * p_bitmap,
+    unsigned short len_port)
+{
+    unsigned short amount_ports; 
+    unsigned short check_divide_ports;
+    unsigned short size_mashina;
+    int ret = 0;
+    
+    if (NULL == p_bitmap) 
+    {
+        ret = -1;
+        fprintf(stderr, "%s: указатель битовой карты не проинициализирован ", __func__ );
+        goto finally;
+    }
+   
+	p_bitmap->magic = BITMAP_MAGIC;
+	p_bitmap->size = len_port;
+	
+	/// определение разрядности машины 
+	size_mashina = sizeof(unsigned long) * 8;
+	
+	/// определение количества разрядности выделяемой памяти,для хранения состояния портов
+	amount_ports = p_bitmap->size / size_mashina;
+	check_divide_ports = p_bitmap->size % size_mashina;
+	   
+	if (0 == check_divide_ports)
+	{
+	     p_bitmap->bit_array = (unsigned long*)calloc(amount_ports,sizeof(unsigned long)); 
+	}
+	else
+	{
+         p_bitmap->bit_array = (unsigned long*)calloc(amount_ports+1,sizeof(unsigned long));
+    }		    
+    
+    if (NULL == p_bitmap->bit_array) 
+    {
+		 // недо­статочно памяти  для выделения битовой карты
+		 fprintf(stderr, "%s: недо­статочно памяти  для выделения битовой карты", __func__ );
+		 ret = -2;
+		 goto finally;
+	}    
+		 
+ finally:
+
+    return ret; 
+}	
 
 /* Функция удаления битового массива.
 Битовый массив должен быть создан с помощью функции создания перед удалением  
