@@ -31,4 +31,6 @@ int bitmap__get_size(
     struct Bitmap const *p_bitmap,
     unsigned short *p_size);
 
+int bitmap__invert(struct Bitmap *p_bitmap);
+
 #endif /* BITMAP_H */
