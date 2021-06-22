@@ -2,6 +2,7 @@
 
 #include <malloc.h>
 #include <stdio.h>
+#include <string.h>
 
 /* Функция удаления битового массива.
 Битовый массив должен быть создан с помощью функции создания перед удалением  
@@ -177,6 +178,42 @@ int bitmap__get_size(
 
  finally:
     
+    return ret;
+}
+
+//Функция для обнуления всех битов битового массива.
+int bitmap__clear_all(struct Bitmap * const p_bitmap)
+{
+    int ret = 0;
+    
+    if (NULL == p_bitmap) 
+    {
+        ret = -1;
+        fprintf(stderr, "%s: arg is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (BITMAP_MAGIC != p_bitmap->magic) 
+    {
+        ret = -2;
+        fprintf(stderr, "%s: wrong magic\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_bitmap->bit_array)
+    {
+        ret = -3;
+        fprintf(stderr, "%s: bit array pointer is nullptr\n", __func__);
+        goto finally;
+    }
+
+    unsigned short size_allocated = 0;
+    unsigned short correction = 0;
+
+    ((p_bitmap->size % sizeof(unsigned long)) == 0) ? (correction = 0) : (correction = 1);
+    size_allocated = p_bitmap->size / (sizeof(unsigned long) * 8) + correction;
+    memset(p_bitmap->bit_array, 0, sizeof(unsigned long) * size_allocated);
+
+ finally:
+
     return ret;
 }
 
