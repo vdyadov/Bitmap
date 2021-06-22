@@ -26,10 +26,11 @@ int bitmap__set_bit(
     struct Bitmap *p_bitmap,
     unsigned short const bit_idx);
 
-
 int bitmap__get_size(
     struct Bitmap const *p_bitmap,
     unsigned short *p_size);
+
+int bitmap__clear_all(struct Bitmap *p_bitmap);
 
 int bitmap__invert(struct Bitmap *p_bitmap);
 

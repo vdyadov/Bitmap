@@ -32,6 +32,12 @@
 * ```struct Bitmap const *p_bitmap``` - указатель на битовый массив.
 * ```unsigned char *p_bit``` - указатель на переменную, в которую будет записан размер
 ***
+```int bitmap__clear_all(struct Bitmap * p_bitmap)```
+
+Обнуление всех битов битового массива.
+
+* ```struct Bitmap * p_bitmap``` - указатель на битовый массив, должен указывать на валидный битмап
+***
 ```int bitmap__invert(struct Bitmap * p_bitmap)```
 
 Побитовая инверсия массива.
