@@ -9,9 +9,10 @@ int bitmap__creator(
     struct Bitmap * p_bitmap,
     unsigned short len_port)
 {
-    unsigned short amount_ports; 
-    unsigned short check_divide_ports;
-    unsigned short size_mashina;
+    unsigned short amount_ports = 0; 
+    unsigned short check_divide_ports = 0;
+    unsigned short size_mashina = 0;
+    
     int ret = 0;
     
     if (NULL == p_bitmap) 
@@ -52,6 +53,72 @@ int bitmap__creator(
 
     return ret; 
 }	
+
+
+// Функция обнуления конкретного бита
+int bitmap__setNull_bit(
+    struct Bitmap * p_bitmap,
+    unsigned short bit_idx) 
+{  
+	unsigned short size_mashina = 0;
+	unsigned short full_sector = 0;
+    unsigned short bit_offset = 0;
+    unsigned long mask = 0;
+	
+    int ret = 0;
+
+    if (NULL == p_bitmap)
+    {
+        ret = -1;
+        fprintf(stderr, "%s: указатель битовой карты не проинициализирован", __func__);
+        goto finally;
+    }
+    else if (BITMAP_MAGIC != p_bitmap->magic)
+    { 
+        ret = -2;
+        fprintf(stderr, "%s: магическое число изменено \n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_bitmap->bit_array)
+    { 
+        ret = -3;
+        fprintf(stderr, "%s:  недо­статочно памяти  для выделения портов битовой карты \n", __func__);
+        goto finally;
+    }
+    else if (bit_idx >= p_bitmap->size)
+    {
+        ret = -4;
+        fprintf(stderr, "%s: номер бита для обнуления больше количества портов битовой карты \n", __func__);
+        goto finally;
+    }
+    
+    // Вычисление позиции целевого бита в масcиве ячеек памяти битовой карты и вычисление маски
+    
+    /// определение разрядности машины 
+	size_mashina = sizeof(unsigned long) * 8;
+	
+	/** для определение координаты обнуляемого бита,найдём количество заполненных ячеек памяти 
+	* с учетом разрядности машины,т.е.индекс в массиве bit_array битовой карты
+	*/
+	full_sector  = bit_idx / size_mashina;
+	
+	/// позиция бита в незаполненной ячейке памяти
+	bit_offset = bit_idx % size_mashina;
+	
+	/// накладываемая маска для обнуления соответствующего бита	
+    mask = (unsigned long) (1 << bit_offset);
+    
+    // операция обнуления конкретного бита
+    p_bitmap->bit_array[full_sector] &=~ mask;
+   
+  finally:
+
+    return ret;
+}
+
+
+
+
 
 /* Функция удаления битового массива.
 Битовый массив должен быть создан с помощью функции создания перед удалением  
