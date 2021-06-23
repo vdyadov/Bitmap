@@ -9,9 +9,9 @@
 //compile with -l tap
 int main(void)
 {
-    plan(4);
     struct Bitmap bmap = {NULL, 0, 0};
-
+    
+    plan(4);
 
     ok(-2 == bitmap__delete(&bmap), "deleting an uncreated bitmap fails with -2");
 
