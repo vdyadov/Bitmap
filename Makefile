@@ -1,38 +1,94 @@
+FLAGS = -Werror=all -Werror=extra -pedantic \
+		-Wno-error=format-nonliteral -Wformat-nonliteral \
+		-Werror=write-strings -Wno-error=discarded-qualifiers \
+		-Wno-error=incompatible-pointer-types -Wno-clobbered -fPIE -fstack-check \
+		-fstack-protector-all -ftrapv -D_FORTIFY_SOURCE=2 \
+		-Wl,-z,relro,-z,now -Wl,-z,noexecstack -Wbad-function-cast -Wcast-align \
+		-Werror=cast-qual -Wconversion -Werror=float-equal -Wformat-security \
+		-Werror=format-overflow=2 -Wformat-truncation -Winline -Winvalid-pch \
+		-Werror=jump-misses-init -Wlogical-op -Wmissing-declarations \
+		-Wmissing-prototypes -Wnested-externs -Wold-style-definition \
+		-Woverlength-strings -Werror=redundant-decls -Werror=shadow \
+		-Werror=strict-overflow=5 -Wsuggest-attribute=const -Werror=switch-default \
+		-Wtrampolines -Werror=undef -Werror=unused -Werror=stringop-overflow=4 \
+		-Wdeclaration-after-statement
+
 CC = gcc
-FLAGS = -Wextra -Wshadow -Wnon-virtual-dtor\
-    -fPIE -fstack-check -fstack-protector-all -ftrapv -D_FORTIFY_SOURCE=2  \
-    -Wl,-z,relro,-z,now -Wl,-z,noexecstack -Wnull-dereference -Wold-style-cast \
-		-Wcast-align -Woverloaded-virtual -Wuseless-cast \
-    -Wcast-align -Wcast-qual -Wconversion \
-    -Wsign-conversion -Wfloat-equal -Wformat-nonliteral -Wformat-security \
-    -Winline -Winvalid-pch -Wlogical-op -Wmissing-declarations \
-    -Wmissing-include-dirs \
-    -Woverlength-strings -Wredundant-decls -Wshadow -Wstrict-overflow=4 \
-    -Wsuggest-attribute=const -Wswitch-default -Wtrampolines \
-    -Wundef -Wunused-local-typedefs -Wwrite-strings -Wno-unused-variable \
-		-Wno-unused-parameter -Wno-missing-include-dirs -Weffc++ \
-    -Werror=implicit-function-declaration -Werror=address \
-    -DUSE_ZLOG \
-
+# Флаги для библиотеки tap
 TAP_FLAGS = -l tap
-PREFIX_NAME =
-NAME_TEST = $(PREFIX_NAME)test
-UNIT_TEST = test/unit/$(NAME_TEST)
-SRC = bitmap
-SOURCE = src/$(SRC)
-OUT = $(NAME_TEST).out
+# Путь к исполняемым файлам
+BIN_PATH = bin
+# Путь к объектным файлам
+OBJ_PATH = obj
+# Путь к исходным файлам
+SRC_PATH = src
+# Путь к unit тестам
+UNIT_TEST_PATH = test/unit
+# Путь к work тестам
+#WORK_TEST_PATH = test/work
+# Расширение исходников
+SRC_EXP = c
 
-all: $(SOURCE).o $(UNIT_TEST).o
-	$(CC) $(NAME_TEST).o $(SRC).o $(FLAGS) -o $(OUT) $(TAP_FLAGS)
+SHELL = /bin/bash
+# Расширение исполняемых файлов
+OUT = out
 
-$(SOURCE).o: $(SOURCE).c
-	$(CC) $(SOURCE).c $(TAP_FLAGS) -c
-	
-$(UNIT_TEST).o: $(UNIT_TEST).c
-	$(CC) $(UNIT_TEST).c $(TAP_FLAGS) -c
+# Исходники
+SOURCES = $(shell find $(SRC_PATH)/ -name '*.$(SRC_EXP)')
+UNIT_TEST_SOURCES = $(shell find $(UNIT_TEST_PATH)/ -name '*.$(SRC_EXP)')
+#WORK_TEST_SOURCES = $(shell find $(UNIT_TEST_PATH)/ -name '*.$(SRC_EXP)')
 
-run:
-	./$(OUT)
+# Объектные модули
+OBJECTS = $(SOURCES:$(SRC_PATH)/%.$(SRC_EXP)=$(OBJ_PATH)/$(SRC_PATH)/%.o)
+UNIT_TEST_OBJECTS = $(UNIT_TEST_SOURCES:$(UNIT_TEST_PATH)/%.$(SRC_EXP)=$(OBJ_PATH)/$(UNIT_TEST_PATH)/%.o)
+#WORK_TEST_OBJECTS = $(WORK_TEST_SOURCES:$(WORK_TEST_PATH)/%.$(SRC_EXP)=$(OBJ_PATH)/$(WORK_TEST_PATH)/%.o)
+
+# Исходники тестов
+UNIT_TEST = $(UNIT_TEST_SOURCES:$(UNIT_TEST_PATH)/%.$(SRC_EXP)=$(BIN_PATH)/$(UNIT_TEST_PATH)/%.c$(OUT))
+
+all: dirs $(BIN_PATH)/$(SRC_PATH) $(BIN_PATH)/$(UNIT_TEST_PATH) #$(BIN_PATH)/$(WORK_TEST_PATH)
+
+$(BIN_PATH)/$(SRC_PATH): $(OBJECTS)
+
+$(BIN_PATH)/$(UNIT_TEST_PATH): $(UNIT_TEST_OBJECTS)
+
+#$(BIN_PATH)/$(WORK_TEST_PATH): $(WORK_TEST_OBJECTS)
+
+$(OBJ_PATH)/$(SRC_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXP)
+	$(CC) $(FLAGS) -c $< -o $@
+
+$(OBJ_PATH)/$(UNIT_TEST_PATH)/%.o: $(UNIT_TEST_PATH)/%.$(SRC_EXP)
+	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $@ $(OBJECTS) -o $(BIN_PATH)/$<$(OUT) $(TAP_FLAGS)
+
+
+#$(OBJ_PATH)/$(WORK_TEST_PATH)/%.o: $(WORK_TEST_PATH)/%.$(SRC_EXP)
+#	$(CC) -c $< -o $@
+#	$(CC) $@ $(OBJECTS) -o $(BIN_PATH)/$< $(TAP_FLAGS)
+
+dirs:
+	@mkdir -p $(dir $(BIN_PATH)/$(UNIT_TEST_PATH)/)
+	@mkdir -p $(dir $(OBJECTS))
+	@mkdir -p $(dir $(UNIT_TEST_OBJECTS))
+
+all_tests: first_test second_test third_test fourth_test fivs_test
+
+first_test:
+	@echo "Запуск первого теста"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_get_test.cout
+second_test:
+	@echo "Запуск второго теста"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_set_test.cout
+third_test:
+	@echo "Запуск третьего теста"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/invert_test.cout
+fourth_test:
+	@echo "Запуск четвертого теста"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/get_size_test.cout
+fivs_test:
+	@echo "Запуск пятого теста"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/test.cout
 
 clean:
-	rm $(NAME_TEST).o $(OUT) $(SRC).o
+	$(RM) -r $(BIN_PATH) $(OBJ_PATH)
+
