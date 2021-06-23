@@ -11,7 +11,6 @@ int main(void)
 {
     struct Bitmap bmap = {NULL, 0, 0};
     struct Bitmap bmap_2 = {NULL, 0, 0};
-    unsigned long check_number = 0;
 
     plan(7);
     
@@ -45,19 +44,14 @@ int main(void)
     bitmap__set_bit(&bmap, 4);
     bitmap__set_bit(&bmap, 7);
 
-    // 01101010... is how I want the number to look
+    // 01011001... is how I want the number to look
     bitmap__set_bit(&bmap_2, 1);
-    bitmap__set_bit(&bmap_2, 2);
+    bitmap__set_bit(&bmap_2, 3);
     bitmap__set_bit(&bmap_2, 4);
-    bitmap__set_bit(&bmap_2, 6);
+    bitmap__set_bit(&bmap_2, 7);
 
-    // 0100100... is number after bitwise AND
-    check_number |= (unsigned long)1 <<(sizeof(unsigned long) * 8 - 1 - 1);
-    check_number |= (unsigned long)1 <<(sizeof(unsigned long) * 8 - 1 - 4);
+    ok(0 == bitmap__equal(&bmap, &bmap_2), "these bitmaps is equal");
 
-    bitmap__and(&bmap, &bmap_2);
-    ok(check_number == *bmap.bit_array, "bitwise AND work correctly");
-    
     free(bmap_2.bit_array);
     free(bmap.bit_array);
     return 0;
