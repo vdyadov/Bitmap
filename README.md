@@ -77,3 +77,61 @@ all_tests: номер_теста_test
 
 * ```struct Bitmap * p_bitmap``` - указатель на объект Bitmap, который будет изменен. Должен указывать на валидный битмап.
 * ```struct Bitmap * p_bitmap_2``` - указатель на объект Bitmap, с которым будет выполняться побитовое И. Должен указывать на валидный битмап.
+
+## Итератор
+
+Структура итератор позволяет перемещаться п битовому массиву, находя следующие единицы или нули.
+
+```c
+typedef struct Bitmap_iterator
+{
+    // Указатель на битмап, с которым связан итератор
+    struct Bitmap *p_bitmap;
+    // Индекс бита, на который указывает итератор
+    unsigned short bit_idx;
+    // Флаг, говорящий о том, что bit_idx указывает за границу массива (биты закончились)
+    unsigned char end_flag;
+} Bitmap_iterator;
+```
+
+### Функции для использования итератора
+```int bitmap_iterator__init(struct Bitmap_iterator *p_iter, struct Bitmap *p_bitmap)```
+
+Связать итератор с *p_bitmap и установить bit_idx на ноль
+* ```struct Bitmap_iterator *p_iter``` - указатель на итератор
+
+* ```struct Bitmap *p_bitmap``` - указатель на битмап, с которым будет связан итератор
+***
+```int bitmap_iterator__next_up(struct Bitmap_iterator *p_iter)```
+
+Перейти к следующей единице
+
+* ```struct Bitmap_iterator *p_iter``` - указатель на итератор
+
+***
+```int bitmap_iterator__next_down(struct Bitmap_iterator *p_iter)```
+
+Перейти к следующему нулю
+
+* ```struct Bitmap_iterator *p_iter``` - указатель на итератор
+
+***
+```int bitmap_iterator__next(struct Bitmap_iterator *p_iter)```
+
+Перейти к следующему биту
+
+* ```struct Bitmap_iterator *p_iter``` - указатель на итератор
+
+***
+```int bitmap_iterator__begin_up(struct Bitmap_iterator *p_iter)```
+
+Найти первую единицу в массиве
+
+* ```struct Bitmap_iterator *p_iter``` - указатель на итератор
+
+***
+```int bitmap_iterator__begin_down(struct Bitmap_iterator *p_iter)```
+
+Найти первый ноль в массиве
+
+* ```struct Bitmap_iterator *p_iter``` - указатель на итератор

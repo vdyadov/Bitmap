@@ -71,7 +71,7 @@ dirs:
 	@mkdir -p $(dir $(OBJECTS))
 	@mkdir -p $(dir $(UNIT_TEST_OBJECTS))
 
-all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test bitmap_and_test
+all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test bitmap_and_test iterator_test
 
 bitmap_get_test:
 	@echo "Запуск первого теста"
@@ -91,6 +91,9 @@ test:
 bitmap_and_test:
 	@echo "Запуск шестого теста"
 	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_and_test.cout
+iterator_test:
+	@echo "Запуск теста итератора"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/iterator_test.cout
 
 clean:
 	$(RM) -r $(BIN_PATH) $(OBJ_PATH)
