@@ -9,9 +9,11 @@
 //compile with -l tap
 int main(void)
 {
-    plan(9);
     struct Bitmap bmap = {NULL, 0, 0};
     unsigned char bit = 0;
+    unsigned char expression = 0;
+
+    plan(9);
 
     ok(-2 == bitmap__get_bit(&bmap, 0, &bit), 
                              "acessing an uncreated bitmap fails with -2");
@@ -30,7 +32,7 @@ int main(void)
                              "acessing a bitmap with p_bit == NULL fails with -5");
 
     (*bmap.bit_array) = 0;
-    unsigned char expression = (bitmap__get_bit(&bmap, 0, &bit) == 0);
+    expression = (bitmap__get_bit(&bmap, 0, &bit) == 0);
     ok(expression && (bit == 0), 
         "acessing succeeds and returns correct bit value");
     

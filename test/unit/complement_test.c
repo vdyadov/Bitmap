@@ -9,9 +9,10 @@
 //compile with -l tap
 int main(void)
 {
-    plan(5);
     struct Bitmap bmap = {NULL, 0, 0};
-    unsigned short size = 0;
+    char expression = 0;
+
+    plan(5);
 
     ok(bitmap__invert(&bmap) == -2, "accessign an uncreated bitmap fails");
     ok(bitmap__invert(NULL) == -1, "acessing a NULL fails");
@@ -29,10 +30,9 @@ int main(void)
     bmap.bit_array[2] = 4;
     bitmap__invert(&bmap);
     
-    char expression = 0;
-    expression = (  bmap.bit_array[0] == ~0xffffabab1212
-                 && bmap.bit_array[1] == ~2
-                 && bmap.bit_array[2] == ~4);
+    expression = (  bmap.bit_array[0] == (unsigned long)~0xffffabab1212
+                 && bmap.bit_array[1] == (unsigned long)~2
+                 && bmap.bit_array[2] == (unsigned long)~4);
     ok(expression, "bitmap is inverted");
 
     free(bmap.bit_array);
