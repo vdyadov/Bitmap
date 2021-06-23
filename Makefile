@@ -91,6 +91,9 @@ test:
 bitmap_and_test:
 	@echo "Запуск шестого теста"
 	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_and_test.cout
+bitmap_equal_test:
+	@echo "Запуск седьмого теста"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_equal_test.cout
 
 clean:
 	$(RM) -r $(BIN_PATH) $(OBJ_PATH)
