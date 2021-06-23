@@ -9,9 +9,10 @@
 //compile with -l tap
 int main(void)
 {
-    plan(7);
     struct Bitmap bmap = {NULL, 0, 0};
     unsigned char bit = 0;
+    
+    plan(7);
     
     ok(-1 == bitmap__set_bit(NULL, 0), "acessing a NULL fails with -1");
 
@@ -25,7 +26,7 @@ int main(void)
     bmap.bit_array = malloc(sizeof(unsigned long));
     bmap.size = sizeof(unsigned long) * 8;
     
-    ok(-4 == bitmap__set_bit(&bmap, bmap.size + 1), 
+    ok(-4 == bitmap__set_bit(&bmap, (unsigned short)(bmap.size + 1)), 
                              "acessing a bitmap with allocated bit_array"
                              " but with size == 0 fails with -4");
 

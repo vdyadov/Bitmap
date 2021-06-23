@@ -41,7 +41,11 @@ int bitmap__get_bit(
     unsigned char * const p_bit)
 {
     int ret = 0;
-    
+    unsigned short long_idx = 0;
+    unsigned long target_long = 0;
+    unsigned short bit_offset = 0;
+    unsigned long mask = 0;
+
     if (NULL == p_bitmap)
     {
         ret = -1;
@@ -73,10 +77,6 @@ int bitmap__get_bit(
         goto finally;        
     }
 
-    unsigned short long_idx = 0;
-    unsigned long target_long = 0;
-    unsigned short bit_offset = 0;
-    unsigned long mask = 0;
     // Вычисление позиции целевого бита в масиве
     // sizof(long) умножается на 8, потому что нужен размер в битах
     long_idx = bit_idx / (sizeof(unsigned long) * 8);
@@ -101,6 +101,9 @@ int bitmap__set_bit(
     unsigned short const bit_idx) 
 {  
     int ret = 0;
+    unsigned short long_idx = 0;
+    unsigned short bit_offset = 0;
+    unsigned long mask = 0;
 
     if (NULL == p_bitmap)
     {
@@ -126,10 +129,6 @@ int bitmap__set_bit(
         fprintf(stderr, "%s: bit index is out of range\n", __func__);
         goto finally;
     }
-    
-    unsigned short long_idx = 0;
-    unsigned short bit_offset = 0;
-    unsigned long mask = 0;
 
     // Вычисление позиции целевого бита в масиве
     // sizof(long) умножается на 8, потому что нужен размер в битах
@@ -185,7 +184,9 @@ int bitmap__get_size(
 int bitmap__clear_all(struct Bitmap * const p_bitmap)
 {
     int ret = 0;
-    
+    unsigned short size_allocated = 0;
+    unsigned short correction = 0;
+
     if (NULL == p_bitmap) 
     {
         ret = -1;
@@ -205,11 +206,9 @@ int bitmap__clear_all(struct Bitmap * const p_bitmap)
         goto finally;
     }
 
-    unsigned short size_allocated = 0;
-    unsigned short correction = 0;
-
     ((p_bitmap->size % sizeof(unsigned long)) == 0) ? (correction = 0) : (correction = 1);
-    size_allocated = p_bitmap->size / (sizeof(unsigned long) * 8) + correction;
+    size_allocated = (unsigned short)
+                     (p_bitmap->size / (sizeof(unsigned long) * 8) + correction);
     memset(p_bitmap->bit_array, 0, sizeof(unsigned long) * size_allocated);
 
  finally:
@@ -221,6 +220,8 @@ int bitmap__clear_all(struct Bitmap * const p_bitmap)
 int bitmap__invert(struct Bitmap * const p_bitmap)
 {
     int ret = 0;
+    unsigned short size_allocated = 0;
+    unsigned short correction = 0;
 
     if (NULL == p_bitmap) 
     {
@@ -241,11 +242,9 @@ int bitmap__invert(struct Bitmap * const p_bitmap)
         goto finally;
     }
 
-    unsigned short size_allocated = 0;
-    unsigned short correction = 0;
-
     ((p_bitmap->size % sizeof(unsigned long)) == 0) ? (correction = 0) : (correction = 1);
-    size_allocated = p_bitmap->size / (sizeof(unsigned long) * 8) + correction;
+    size_allocated = (unsigned short)
+                     (p_bitmap->size / (sizeof(unsigned long) * 8) + correction);
     for (unsigned short i = 0; i < size_allocated; ++i)
     {
         /* это флипает лишние биты в конце, если размер не кратен размеру лонга,

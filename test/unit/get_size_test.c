@@ -9,9 +9,10 @@
 //compile with -l tap
 int main(void)
 {
-    plan(4);
     struct Bitmap bmap = {NULL, 0, 0};
     unsigned short size = 0;
+    
+    plan(4);
 
     ok(bitmap__get_size(&bmap, &size) == -2, "accessign an uncreated bitmap fails");
     ok(bitmap__get_size(NULL, &size) == -1, "acessing a NULL fails");
