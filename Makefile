@@ -73,8 +73,11 @@ dirs:
 
 all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test \
 	bitmap_and_test iterator_test bitmap_equal_test xor_test nand_test \
-	bitmap_or_test copy_bit_test
+	bitmap_create_test bitmap_or_test copy_bit_test
 
+bitmap_create_test:
+	@echo "Запуск теста по созданию функции"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_create_test.cout
 bitmap_get_test:
 	@echo "Запуск первого теста"
 	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_get_test.cout

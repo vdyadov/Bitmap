@@ -29,6 +29,14 @@ all_tests: номер_теста_test
 
 ## Функции
 
+```int bitmap__create(struct Bitmap * p_bitmap, unsigned short len_port)```
+
+Создание объекта битмап. Битмап должен быть
+валидным. Функция создания битмапа выделяет диннамическую память, с определенным количеством портов.
+
+* ```struct Bitmap * p_bitmap``` - указатель на объект, который будет удален.
+* ```unsigned short len_port``` - количество портов.
+***
 ```int bitmap__delete(struct Bitmap * p_bitmap)```
 
 Удаление объекта битмап. Битмап должен быть
