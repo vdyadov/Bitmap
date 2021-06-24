@@ -73,7 +73,8 @@ dirs:
 
 all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test \
 	bitmap_and_test iterator_test bitmap_equal_test xor_test nand_test \
-	bitmap_create_test bitmap_or_test copy_bit_test copy_create_test
+	bitmap_create_test bitmap_or_test copy_bit_test copy_create_test \
+	bitmap_clear_bit_test
 
 bitmap_create_test:
 	@echo "Запуск теста по созданию функции"
@@ -84,6 +85,9 @@ bitmap_get_test:
 bitmap_set_test:
 	@echo "Запуск второго теста"
 	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_set_test.cout
+bitmap_clear_bit_test:
+	@echo "Запуск теста обнуления бита"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_clear_bit_test.cout	
 invert_test:
 	@echo "Запуск третьего теста"
 	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/invert_test.cout
