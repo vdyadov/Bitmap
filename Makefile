@@ -73,7 +73,7 @@ dirs:
 
 all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test \
 	bitmap_and_test iterator_test bitmap_equal_test xor_test nand_test \
-	bitmap_create_test bitmap_or_test copy_bit_test
+	bitmap_create_test bitmap_or_test copy_bit_test copy_create_test
 
 bitmap_create_test:
 	@echo "Запуск теста по созданию функции"
@@ -114,7 +114,9 @@ bitmap_or_test:
 copy_bit_test:
 	@echo "Запуск теста сравнения двух массивов"
 	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/copy_bit_test.cout
-
+copy_create_test:
+	@echo "Запуск теста копирующего конструктора"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/copy_create_test.cout
 
 clean:
 	$(RM) -r $(BIN_PATH) $(OBJ_PATH)

@@ -707,3 +707,54 @@ int bitmap__copy_bit(
     return ret;    
 }
 
+// Создать новую битмапу по первому аргументу и скопировать в нее массив из второго
+int bitmap__copy_create(
+    struct Bitmap * const p_new,
+    struct Bitmap const * const p_old)
+{
+    int ret = 0;
+    unsigned short bitmap_size = 0;
+
+    if (NULL == p_old) 
+    {
+        ret = -1;
+        fprintf(stderr, "%s: arg is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (BITMAP_MAGIC != p_old->magic) 
+    {
+        ret = -2;
+        fprintf(stderr, "%s: wrong magic\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_new)
+    {
+        ret = -4;
+        fprintf(stderr, "%s: arg is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_old->bit_array)
+    {
+        ret = -3;
+        fprintf(stderr, "%s: bit array pointer is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (p_old == p_new)
+    {
+        ret = -5;
+        fprintf(stderr, "%s: trying to copy-construct a bitmap into itself\n", __func__);
+        goto finally;
+    }
+
+    if (BITMAP_MAGIC == p_new->magic)
+    {
+        bitmap__delete(p_new);
+    }
+    bitmap__get_size(p_old, &bitmap_size);
+    bitmap__create(p_new, bitmap_size);
+    bitmap__copy_bit(p_new, p_old);
+
+ finally:
+
+    return ret;
+}
