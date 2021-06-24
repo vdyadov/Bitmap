@@ -4,6 +4,47 @@
 #include <stdio.h>
 #include <string.h>
 
+// Функция создания битового массива определенной размерности для n-разрядной машины
+int bitmap__create(
+    struct Bitmap * p_bitmap,
+    unsigned short len_port)
+{
+    unsigned long amount_ports = 0; 
+    unsigned short correction = 0;
+
+    int ret = 0;
+
+    if (NULL == p_bitmap) 
+    {
+        ret = -1;
+        fprintf(stderr, "%s: указатель битовой карты не проинициализирован ", __func__ );
+        goto finally;
+    }
+
+    p_bitmap->magic = BITMAP_MAGIC;
+    p_bitmap->size = len_port;
+
+    /// определение количества разрядности выделяемой памяти,для хранения состояния портов
+    ((p_bitmap->size % sizeof(unsigned long)) == 0) ? (correction = 0) : (correction = 1);
+    amount_ports = (unsigned short)
+                    (p_bitmap->size / (sizeof(unsigned long) * 8) + correction);
+	
+    p_bitmap->bit_array = calloc(amount_ports, sizeof(unsigned long));	    
+
+    if (NULL == p_bitmap->bit_array) 
+    {
+        // недостаточно памяти  для выделения битовой карты
+        fprintf(stderr, "%s: недо­статочно памяти  для выделения битовой карты",
+                __func__ );
+        ret = -2;
+        goto finally;
+    } 
+
+ finally:
+
+    return ret; 
+}
+
 /* Функция удаления битового массива.
 Битовый массив должен быть создан с помощью функции создания перед удалением  
 */
