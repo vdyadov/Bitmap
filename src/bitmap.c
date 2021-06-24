@@ -262,8 +262,8 @@ int bitmap__invert(struct Bitmap * const p_bitmap)
 
 // Побитовое сравнение двух массивов.
 int bitmap__equal(
-    struct Bitmap * const p_bitmap,
-    struct Bitmap * const p_bitmap_2)
+    struct Bitmap const * const p_bitmap,
+    struct Bitmap const * const p_bitmap_2)
 {
     int ret = 0;
     int check = 1;
@@ -337,10 +337,10 @@ int bitmap__equal(
     return ret;
 }
 
-// Побитовое AND для массивов.
+// Побитовое AND для массивов, результат записывается в первый аргумент.
 int bitmap__and(
     struct Bitmap * const p_bitmap,
-    struct Bitmap * const p_bitmap_2)
+    struct Bitmap const * const p_bitmap_2)
 {
     int ret = 0;
     unsigned short size_allocated = 0;
@@ -401,6 +401,72 @@ int bitmap__and(
  finally:
 
     return ret;
+}
+
+// Побитовое ИЛИ, результат записывается в первый аргумент
+int bitmap__or(
+    struct Bitmap * const p_bitmap,
+    struct Bitmap const * const p_bitmap_2)
+{
+    int ret = 0;
+    unsigned short size_allocated = 0;
+    unsigned short correction = 0;
+
+    if (NULL == p_bitmap) 
+    {
+        ret = -1;
+        fprintf(stderr, "%s: arg is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (BITMAP_MAGIC != p_bitmap->magic) 
+    {
+        ret = -2;
+        fprintf(stderr, "%s: wrong magic\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_bitmap->bit_array)
+    {
+        ret = -3;
+        fprintf(stderr, "%s: bit array pointer is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_bitmap_2) 
+    {
+        ret = -4;
+        fprintf(stderr, "%s: second bitmap is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (BITMAP_MAGIC != p_bitmap_2->magic) 
+    {
+        ret = -5;
+        fprintf(stderr, "%s: wrong magic in second bitmap\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_bitmap_2->bit_array)
+    {
+        ret = -6;
+        fprintf(stderr, "%s: in second bitmap bit array pointer is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (p_bitmap->size != p_bitmap_2->size)
+    {
+        ret = -7;
+        fprintf(stderr, "%s: these bitmaps have different sizes", __func__);
+        goto finally;
+    }
+
+    ((p_bitmap->size % sizeof(unsigned long)) == 0) ? (correction = 0) : (correction = 1);
+    size_allocated = (unsigned short)
+                     (p_bitmap->size / (sizeof(unsigned long) * 8) + correction);
+
+    for (unsigned short i = 0; i < size_allocated; ++i)
+    {
+        p_bitmap->bit_array[i] |= p_bitmap_2->bit_array[i];
+    }
+
+ finally:
+
+    return ret;    
 }
 
 // Побитовое исключающее или, результат записывается в первый аргумент
@@ -468,7 +534,7 @@ int bitmap__xor(
 
     return ret;    
 }
-
+// Побитовое отрицание И, результат записывается в первый аргумент
 int bitmap__nand(
     struct Bitmap * const p_bitmap,
     struct Bitmap const * const p_bitmap_2)
@@ -533,3 +599,70 @@ int bitmap__nand(
 
     return ret;    
 }
+
+// Копирование битов из одного битмапа в другой, результат записывается в первый аргумент
+int bitmap__copy_bit(
+    struct Bitmap * const p_bitmap,
+    struct Bitmap const * const p_bitmap_2)
+{ 
+    int ret = 0;
+    unsigned short size_allocated = 0;
+    unsigned short correction = 0;
+
+    if (NULL == p_bitmap) 
+    {
+        ret = -1;
+        fprintf(stderr, "%s: arg is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (BITMAP_MAGIC != p_bitmap->magic) 
+    {
+        ret = -2;
+        fprintf(stderr, "%s: wrong magic\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_bitmap->bit_array)
+    {
+        ret = -3;
+        fprintf(stderr, "%s: bit array pointer is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_bitmap_2) 
+    {
+        ret = -4;
+        fprintf(stderr, "%s: second bitmap is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (BITMAP_MAGIC != p_bitmap_2->magic) 
+    {
+        ret = -5;
+        fprintf(stderr, "%s: wrong magic in second bitmap\n", __func__);
+        goto finally;
+    }
+    else if (NULL == p_bitmap_2->bit_array)
+    {
+        ret = -6;
+        fprintf(stderr, "%s: in second bitmap bit array pointer is nullptr\n", __func__);
+        goto finally;
+    }
+    else if (p_bitmap->size != p_bitmap_2->size)
+    {
+        ret = -7;
+        fprintf(stderr, "%s: these bitmaps have different sizes", __func__);
+        goto finally;
+    }
+
+    ((p_bitmap->size % sizeof(unsigned long)) == 0) ? (correction = 0) : (correction = 1);
+    size_allocated = (unsigned short)
+                     (p_bitmap->size / (sizeof(unsigned long) * 8) + correction);
+
+    for (unsigned short i = 0; i < size_allocated; ++i)
+    {
+        p_bitmap->bit_array[i] = p_bitmap_2->bit_array[i];
+     }
+
+ finally:
+
+    return ret;    
+}
+

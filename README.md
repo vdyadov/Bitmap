@@ -78,12 +78,40 @@ all_tests: номер_теста_test
 * ```struct Bitmap * p_bitmap``` - указатель на объект Bitmap. Должен указывать на валидный битмап.
 * ```struct Bitmap * p_bitmap_2``` - указатель на объект Bitmap, с которым будет производиться сравнение. Должен указывать на валидный битмап.
 ***
-```int bitmap__and(struct Bitmap * p_bitmap, struct Bitmap * p_bitmap_2)```
+```int bitmap__and(struct Bitmap * p_bitmap, struct Bitmap const * p_bitmap_2)```
 
 Побитовое И двух массивов.
 
 * ```struct Bitmap * p_bitmap``` - указатель на объект Bitmap, который будет изменен. Должен указывать на валидный битмап.
-* ```struct Bitmap * p_bitmap_2``` - указатель на объект Bitmap, с которым будет выполняться побитовое И. Должен указывать на валидный битмап.
+* ```struct Bitmap const * p_bitmap_2``` - указатель на объект Bitmap, с которым будет выполняться побитовое И. Должен указывать на валидный битмап.
+***
+```int bitmap__or(struct Bitmap * p_bitmap, struct Bitmap const * p_bitmap_2)```
+
+Побитовое ИЛИ двух массивов.
+
+* ```struct Bitmap * p_bitmap``` - указатель на объект Bitmap, который будет изменен. Должен указывать на валидный битмап.
+* ```struct Bitmap const * p_bitmap_2``` - указатель на объект Bitmap, с которым будет выполняться побитовое ИЛИ. Должен указывать на валидный битмап.
+***
+```int bitmap__xor(struct Bitmap * p_bitmap, struct Bitmap const * p_bitmap_2)```
+
+Побитовое исключающее ИЛИ двух массивов.
+
+* ```struct Bitmap * p_bitmap``` - указатель на объект Bitmap, который будет изменен. Должен указывать на валидный битмап.
+* ```struct Bitmap const * p_bitmap_2``` - указатель на объект Bitmap, с которым будет выполняться побитовое исключающее ИЛИ. Должен указывать на валидный битмап.
+***
+```int bitmap__nand(struct Bitmap * p_bitmap, struct Bitmap const * p_bitmap_2)```
+
+Побитовое отрицание И двух массивов.
+
+* ```struct Bitmap * p_bitmap``` - указатель на объект Bitmap, который будет изменен. Должен указывать на валидный битмап.
+* ```struct Bitmap const * p_bitmap_2``` - указатель на объект Bitmap, с которым будет выполняться побитовое отрицание И. Должен указывать на валидный битмап.
+***
+```int bitmap__copy_bit(struct Bitmap * p_bitmap, struct Bitmap const * p_bitmap_2)```
+
+Копирование битов массива 2 в массив 1.
+
+* ```struct Bitmap * p_bitmap``` - указатель на объект Bitmap, который будет изменен. Должен указывать на валидный битмап.
+* ```struct Bitmap const * p_bitmap_2``` - указатель на объект Bitmap, из которого будут копироваться биты. Должен указывать на валидный битмап.
 
 ## Итератор
 

@@ -71,8 +71,9 @@ dirs:
 	@mkdir -p $(dir $(OBJECTS))
 	@mkdir -p $(dir $(UNIT_TEST_OBJECTS))
 
-all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test bitmap_and_test iterator_test bitmap_equal_test\
-	xor_test nand_test
+all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test \
+	bitmap_and_test iterator_test bitmap_equal_test xor_test nand_test \
+	bitmap_or_test copy_bit_test
 
 bitmap_get_test:
 	@echo "Запуск первого теста"
@@ -104,6 +105,12 @@ xor_test:
 nand_test:
 	@echo "Запуск теста NAND"
 	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/nand_test.cout
+bitmap_or_test:
+	@echo "Запуск теста сравнения двух массивов"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_or_test.cout
+copy_bit_test:
+	@echo "Запуск теста сравнения двух массивов"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/copy_bit_test.cout
 
 
 clean:
