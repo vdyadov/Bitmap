@@ -71,7 +71,8 @@ dirs:
 	@mkdir -p $(dir $(OBJECTS))
 	@mkdir -p $(dir $(UNIT_TEST_OBJECTS))
 
-all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test bitmap_and_test iterator_test bitmap_equal_test
+all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test bitmap_and_test iterator_test bitmap_equal_test\
+	xor_test nand_test
 
 bitmap_get_test:
 	@echo "Запуск первого теста"
@@ -97,6 +98,12 @@ iterator_test:
 bitmap_equal_test:
 	@echo "Запуск теста сравнения двух массивов"
 	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_equal_test.cout
+xor_test:
+	@echo "Запуск теста исключающего или"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/xor_test.cout
+nand_test:
+	@echo "Запуск теста NAND"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/nand_test.cout
 
 
 clean:
