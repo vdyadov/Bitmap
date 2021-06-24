@@ -29,13 +29,13 @@ all_tests: номер_теста_test
 
 ## Функции
 
-```int bitmap__create(struct Bitmap * p_bitmap, unsigned short len_port)```
+```int bitmap__create(struct Bitmap * p_bitmap, unsigned short const len_port)```
 
 Создание объекта битмап. Битмап должен быть
 валидным. Функция создания битмапа выделяет диннамическую память, с определенным количеством портов.
 
 * ```struct Bitmap * p_bitmap``` - указатель на объект, который будет удален.
-* ```unsigned short len_port``` - количество портов.
+* ```unsigned short const len_port``` - количество портов.
 ***
 ```int bitmap__delete(struct Bitmap * p_bitmap)```
 
@@ -56,6 +56,13 @@ all_tests: номер_теста_test
 ```int bitmap__set_bit(struct Bitmap const *p_bitmap, unsigned short const bit_idx)```
  
  Установка нужного бита. В функцию требуется передать валидный битмап и номер бита, который необходимо установить.
+
+* ```struct Bitmap const *p_bitmap``` - указатель на битовый массив.
+* ```unsigned short const bit_idx``` - индекс требуемого бита.
+***
+```int bitmap__clear_bit(struct Bitmap const *p_bitmap, unsigned short const bit_idx)```
+ 
+ Обнуление требуемого бита. В функцию требуется передать валидный битмап и номер бита, который необходимо обнулить.
 
 * ```struct Bitmap const *p_bitmap``` - указатель на битовый массив.
 * ```unsigned short const bit_idx``` - индекс требуемого бита.
