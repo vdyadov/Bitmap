@@ -34,6 +34,10 @@ int bitmap__clear_all(struct Bitmap *p_bitmap);
 
 int bitmap__invert(struct Bitmap *p_bitmap);
 
+int bitmap__equal(
+        struct Bitmap *p_bitmap,
+        struct Bitmap *p_bitmap_2);
+
 int bitmap__and(
         struct Bitmap *p_bitmap,
         struct Bitmap *p_bitmap_2);

@@ -71,6 +71,13 @@ all_tests: номер_теста_test
 
 * ```struct Bitmap * p_bitmap``` - указатель на объект Bitmap, который будет инвертирован. Должен указывать на валидный битмап.
 ***
+```int bitmap__equal(struct Bitmap * p_bitmap, struct Bitmap * p_bitmap_2)```
+
+Побитовое сравнение двух массивов.
+
+* ```struct Bitmap * p_bitmap``` - указатель на объект Bitmap. Должен указывать на валидный битмап.
+* ```struct Bitmap * p_bitmap_2``` - указатель на объект Bitmap, с которым будет производиться сравнение. Должен указывать на валидный битмап.
+***
 ```int bitmap__and(struct Bitmap * p_bitmap, struct Bitmap * p_bitmap_2)```
 
 Побитовое И двух массивов.

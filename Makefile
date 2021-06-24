@@ -71,7 +71,7 @@ dirs:
 	@mkdir -p $(dir $(OBJECTS))
 	@mkdir -p $(dir $(UNIT_TEST_OBJECTS))
 
-all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test bitmap_and_test iterator_test
+all_tests: bitmap_get_test bitmap_set_test invert_test get_size_test test bitmap_and_test iterator_test bitmap_equal_test
 
 bitmap_get_test:
 	@echo "Запуск первого теста"
@@ -94,6 +94,10 @@ bitmap_and_test:
 iterator_test:
 	@echo "Запуск теста итератора"
 	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/iterator_test.cout
+bitmap_equal_test:
+	@echo "Запуск теста сравнения двух массивов"
+	@./$(BIN_PATH)/$(UNIT_TEST_PATH)/bitmap_equal_test.cout
+
 
 clean:
 	$(RM) -r $(BIN_PATH) $(OBJ_PATH)
