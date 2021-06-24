@@ -62,4 +62,8 @@ int bitmap__copy_bit(
     struct Bitmap *p_bitmap,
     struct Bitmap const *p_bitmap_2);
 
+int bitmap__copy_create(
+    struct Bitmap *p_new,
+    struct Bitmap const *p_old);
+
 #endif /* BITMAP_H */
